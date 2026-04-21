@@ -6,65 +6,141 @@
   <title>FOMO-утро • 2026-04-21</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    @keyframes matrixGlow {
+      0%, 100% { text-shadow: 0 0 10px #00ff00, 0 0 20px #00aa00, 0 0 30px #008800; }
+      50% { text-shadow: 0 0 20px #00ff00, 0 0 40px #00cc00, 0 0 60px #00aa00; }
+    }
+    
+    @keyframes scanline {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(10px); }
+    }
+    
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.98; }
+    }
+    
+    @keyframes buttonHover {
+      0%, 100% { box-shadow: 0 0 10px #00ff00, inset 0 0 10px rgba(0,255,0,0.3); }
+      50% { box-shadow: 0 0 20px #00ff00, inset 0 0 20px rgba(0,255,0,0.5); }
     }
 
-    html, body {
-      height: 100%;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    
     body {
       font-family: 'IBM Plex Mono', monospace;
-      background: #f9f9f9;
+      background: #000000;
+      color: #00ff00;
       overflow-x: hidden;
+      position: relative;
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0,255,0,0.03) 0px,
+        rgba(0,255,0,0.03) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 9999;
+      animation: scanline 8s linear infinite;
     }
 
     .header {
-      text-align: center;
-      padding: 80px 40px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      min-height: 100vh;
+      padding: 60px 80px;
+      background: #000000;
+      color: #00ff00;
       position: relative;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 3px solid #00ff00;
     }
 
     .header::before {
       content: '';
       position: absolute;
-      top: -50%;
-      right: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-      background-size: 50px 50px;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 20% 50%, rgba(0,255,0,0.05) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(0,255,0,0.05) 0%, transparent 50%);
+      z-index: 0;
     }
 
-    .header > * {
+    .header::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: 2px solid rgba(0,255,0,0.1);
+      box-shadow: inset 0 0 20px rgba(0,255,0,0.05);
+      z-index: 0;
+    }
+
+    .header-content {
       position: relative;
       z-index: 1;
+      text-align: center;
+    }
+
+    .header-logo {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 40px;
+    }
+
+    .header-logo img {
+      max-width: 200px;
+      max-height: 200px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 20px rgba(0,255,0,0.6)) brightness(1.2);
+      border: 2px solid #00ff00;
+      padding: 15px;
+      background: rgba(0,255,0,0.05);
     }
 
     .header h1 {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 5rem;
-      margin-bottom: 15px;
+      font-size: 7rem;
+      margin-bottom: 30px;
       font-weight: 700;
-      letter-spacing: -2px;
+      letter-spacing: 4px;
+      line-height: 1;
+      color: #00ff00;
+      animation: matrixGlow 3s ease-in-out infinite, flicker 0.15s infinite;
+      text-shadow: 0 0 10px #00ff00, 0 0 20px #00aa00;
     }
 
-    .header .meta {
-      font-size: 1.1rem;
-      opacity: 0.95;
+    .header-meta {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      color: #00dd00;
       text-transform: capitalize;
+      letter-spacing: 2px;
     }
 
-    .header .time {
-      font-size: 0.9rem;
-      opacity: 0.8;
-      margin-top: 10px;
+    .header-issue {
+      font-size: 1.1rem;
+      color: #00ff00;
+      font-weight: 600;
+      letter-spacing: 1px;
     }
 
     .articles {
@@ -75,13 +151,16 @@
 
     .article {
       min-height: 100vh;
-      padding: 100px 80px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
+      padding: 80px 80px;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 60px;
+      align-items: center;
       position: relative;
       overflow: hidden;
+      background: #000000;
+      border-bottom: 2px solid rgba(0,255,0,0.3);
+      color: #00ff00;
     }
 
     .article::before {
@@ -91,300 +170,332 @@
       left: 0;
       right: 0;
       bottom: 0;
+      background: radial-gradient(circle at 10% 50%, rgba(0,255,0,0.08) 0%, transparent 50%);
       z-index: -1;
-    }
-
-    .article-image {
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 40%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.15;
-      z-index: 0;
     }
 
     .article-content {
       position: relative;
       z-index: 1;
-      max-width: 700px;
+      display: flex;
+      flex-direction: column;
     }
 
     .article-number {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 6rem;
+      font-size: 5rem;
       opacity: 0.2;
       margin-bottom: 20px;
       font-weight: 700;
       line-height: 1;
+      color: #00ff00;
+      letter-spacing: 2px;
     }
 
     .article-source {
-      font-size: 0.85rem;
-      opacity: 0.7;
-      margin-bottom: 15px;
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-bottom: 20px;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
       font-weight: 600;
+      color: #00dd00;
+      border-left: 3px solid #00ff00;
+      padding-left: 15px;
     }
 
     .article h2 {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 3.5rem;
+      font-size: 2.8rem;
       margin-bottom: 30px;
-      line-height: 1.15;
+      line-height: 1.2;
       font-weight: 700;
+      color: #00ff00;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(0,255,0,0.5);
     }
 
-    .article p {
-      font-size: 1.15rem;
-      line-height: 1.7;
-      margin-bottom: 40px;
+    .article-quote {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 30px;
       opacity: 0.95;
+      padding: 20px;
+      border-left: 4px solid #00ff00;
+      background: rgba(0,255,0,0.05);
+      font-style: italic;
+      color: #00ee00;
+    }
+
+    .article-image-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      min-height: 400px;
+      border-radius: 0px;
+      overflow: hidden;
+      background: #0a0a0a;
+      border: 2px solid #00ff00;
+      box-shadow: 0 0 20px rgba(0,255,0,0.3);
+    }
+
+    .article-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(1.1) contrast(1.2);
+    }
+
+    .article-image-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0,255,0,0.1), rgba(0,255,0,0.05));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      opacity: 0.5;
+      color: #00ff00;
+      border: 1px dashed #00ff00;
     }
 
     .article .read-more {
       display: inline-block;
-      padding: 18px 50px;
-      font-size: 1rem;
+      margin-top: auto;
+      padding: 15px 35px;
+      font-size: 0.95rem;
       font-weight: 700;
       text-decoration: none;
-      border-radius: 50px;
+      border-radius: 0px;
       transition: all 0.3s ease;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      border: 2px solid;
+      letter-spacing: 2px;
+      border: 2px solid #00ff00;
+      background: transparent;
+      color: #00ff00;
+      width: fit-content;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article .read-more::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,255,0,0.2);
+      transition: left 0.3s ease;
+      z-index: -1;
     }
 
     .article .read-more:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      animation: buttonHover 0.6s ease;
+    }
+
+    .article .read-more:hover::before {
+      left: 0;
     }
 
     @media (max-width: 1024px) {
+      .header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 5rem;
+      }
+
       .article {
+        grid-template-columns: 1fr;
+        gap: 40px;
         padding: 60px 50px;
       }
-      
-      .article h2 {
-        font-size: 2.8rem;
-      }
-      
-      .article-image {
-        width: 50%;
+
+      .article-image-container {
+        min-height: 300px;
       }
     }
 
     @media (max-width: 768px) {
-      .article {
-        padding: 50px 30px;
+      .header {
+        padding: 40px 20px;
         min-height: auto;
-      }
-
-      .article-image {
-        display: none;
-      }
-
-      .article h2 {
-        font-size: 2rem;
-      }
-
-      .article p {
-        font-size: 1rem;
       }
 
       .header h1 {
         font-size: 3rem;
       }
 
-      .header {
-        padding: 50px 20px;
+      .header-logo img {
+        max-width: 150px;
+      }
+
+      .article {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 40px 20px;
+        min-height: auto;
+      }
+
+      .article h2 {
+        font-size: 1.8rem;
+      }
+
+      .article-quote {
+        font-size: 1rem;
+      }
+
+      .article-image-container {
+        min-height: 250px;
       }
     }
   </style>
 </head>
 <body>
   <div class="header">
-    <h1>FOMO-утро</h1>
-    <div class="meta">вторник, апрель 2026 г.</div>
-    <div class="time">Выпуск от 08:37</div>
+    <div class="header-logo">
+      <img src="logo.png" alt="FOMO-утро logo" onerror="this.style.display='none'">
+    </div>
+    <div class="header-content">
+      <h1>FOMO-УТРО</h1>
+      <div class="header-meta">21 апрель 2026 • 09:43</div>
+      <div class="header-issue">Выпуск №21</div>
+    </div>
   </div>
 
   <div class="articles">
   
-    <article class="article" style="background: #000; color: #fff;">
-      <img src="https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2249181820.jpg?w=562" alt="" class="article-image" onerror="this.style.display='none'">
+    <article class="article">
       <div class="article-content">
         <div class="article-number">01</div>
-        <div class="article-source">TechCrunch</div>
-        <h2>Google Photos adds new touch-up tools for ‘quick’ fixes</h2>
-        <p></p>
-        <a href="https://techcrunch.com/2026/04/20/google-photos-adds-new-touch-up-tools-for-quick-fixes/" target="_blank" rel="noopener noreferrer" class="read-more" style="
-      background: #00ff00;
-      color: #000;
-      border-color: #00ff00;
-    ">
-          Читать полностью →
-        </a>
+        <div class="article-source">Every.to</div>
+        <h2>The Folder Is the Agent</h2>
+        <div class="article-quote">I'm running 44 AI agents across multiple projects.</div>
+        <a href="https://every.to/source-code/the-folder-is-the-agent" target="_blank" rel="noopener noreferrer" class="read-more">Читать →</a>
+      </div>
+      <div class="article-image-container">
+        <img src="https://d24ovhgu8s7341.cloudfront.net/uploads/post/cover/4108/thumbnail_The_Folder_Is_the_Agent.png" alt="" class="article-image" onerror="this.parentElement.innerHTML='<div class=\'article-image-placeholder\'>Нет изображения</div>'">
       </div>
     </article>
     
-    <article class="article" style="background: #0a0e27; color: #e0e6ff;">
-      
+    <article class="article">
       <div class="article-content">
         <div class="article-number">02</div>
-        <div class="article-source">TechCrunch</div>
-        <h2>‘Tokenmaxxing’ is making developers less productive than they think</h2>
-        <p>‘Tokenmaxxing’ is making developers less productive than they think</p>
-        <a href="https://techcrunch.com/2026/04/17/tokenmaxxing-is-making-developers-less-productive-than-they-think/" target="_blank" rel="noopener noreferrer" class="read-more" style="
-      background: #6366f1;
-      color: #fff;
-      border-color: #6366f1;
-    ">
-          Читать полностью →
-        </a>
+        <div class="article-source">Every.to</div>
+        <h2>Vibe Check: Cursor 3.0 Bets Big on Agent Orchestration</h2>
+        <div class="article-quote">The AI-native IDE is now becoming an agent-orchestration tool.</div>
+        <a href="https://every.to/vibe-check/cursor" target="_blank" rel="noopener noreferrer" class="read-more">Читать →</a>
+      </div>
+      <div class="article-image-container">
+        <img src="https://d24ovhgu8s7341.cloudfront.net/uploads/post/cover/4091/thumbnail_Vibe_Check__Cursor(2).png" alt="" class="article-image" onerror="this.parentElement.innerHTML='<div class=\'article-image-placeholder\'>Нет изображения</div>'">
       </div>
     </article>
     
-    <article class="article" style="background: #fce7f3; color: #831843;">
-      
+    <article class="article">
       <div class="article-content">
         <div class="article-number">03</div>
-        <div class="article-source">TechCrunch</div>
-        <h2>Anthropic launches Claude Design, a new product for creating quick visuals</h2>
-        <p>Anthropic launches Claude Design, a new product for creating quick visuals</p>
-        <a href="https://techcrunch.com/2026/04/17/anthropic-launches-claude-design-a-new-product-for-creating-quick-visuals/" target="_blank" rel="noopener noreferrer" class="read-more" style="
-      background: #ec4899;
-      color: #fff;
-      border-color: #ec4899;
-    ">
-          Читать полностью →
-        </a>
+        <div class="article-source">Every.to</div>
+        <h2>The Agent That Saved My Brain</h2>
+        <div class="article-quote">How Every's growth lead built a command center in Claude Code.</div>
+        <a href="https://every.to/p/the-agent-that-saved-my-brain" target="_blank" rel="noopener noreferrer" class="read-more">Читать →</a>
+      </div>
+      <div class="article-image-container">
+        <img src="https://d24ovhgu8s7341.cloudfront.net/uploads/post/cover/4018/thumbnail_How_to_Build_a_Command__C_enter_That_Keeps_You_Sane.png" alt="" class="article-image" onerror="this.parentElement.innerHTML='<div class=\'article-image-placeholder\'>Нет изображения</div>'">
       </div>
     </article>
     
-    <article class="article" style="background: #1a1a2e; color: #00ff41;">
-      
+    <article class="article">
       <div class="article-content">
         <div class="article-number">04</div>
-        <div class="article-source">TechCrunch</div>
-        <h2>After sale of its shoe business, Allbirds pivots to AI</h2>
-        <p>After sale of its shoe business, Allbirds pivots to AI</p>
-        <a href="https://techcrunch.com/2026/04/15/after-sale-of-its-shoe-business-allbirds-pivots-to-ai/" target="_blank" rel="noopener noreferrer" class="read-more" style="
-      background: #ff006e;
-      color: #fff;
-      border-color: #ff006e;
-    ">
-          Читать полностью →
-        </a>
+        <div class="article-source">Every.to</div>
+        <h2>Build Your Own Financial Analyst With AI</h2>
+        <div class="article-quote">A step-by-step guide to going from ChatGPT earnings previews to a custom investment dashboard—no engineering team required.</div>
+        <a href="https://every.to/p/build-your-own-financial-analyst-with-ai" target="_blank" rel="noopener noreferrer" class="read-more">Читать →</a>
+      </div>
+      <div class="article-image-container">
+        <img src="https://d24ovhgu8s7341.cloudfront.net/uploads/post/cover/4086/thumbnail_darudesign_4_coins_greco_roman_environment_--ar_169_--sref_http_66b223c2-ceb3-4439-8681-39787a6696be.png" alt="" class="article-image" onerror="this.parentElement.innerHTML='<div class=\'article-image-placeholder\'>Нет изображения</div>'">
       </div>
     </article>
     
-    <article class="article" style="background: #f5f3ff; color: #2d1b69;">
-      <img src="https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2249181820.jpg?w=562" alt="" class="article-image" onerror="this.style.display='none'">
+    <article class="article">
       <div class="article-content">
         <div class="article-number">05</div>
-        <div class="article-source">TechCrunch</div>
-        <h2>Google Photos adds new touch-up tools for ‘quick’ fixes</h2>
-        <p></p>
-        <a href="https://techcrunch.com/2026/04/20/google-photos-adds-new-touch-up-tools-for-quick-fixes/" target="_blank" rel="noopener noreferrer" class="read-more" style="
-      background: #7c3aed;
-      color: #fff;
-      border-color: #7c3aed;
-    ">
-          Читать полностью →
-        </a>
+        <div class="article-source">Every.to</div>
+        <h2>The Folder Is the Agent</h2>
+        <div class="article-quote">I'm running 44 AI agents across multiple projects.</div>
+        <a href="https://every.to/source-code/the-folder-is-the-agent" target="_blank" rel="noopener noreferrer" class="read-more">Читать →</a>
+      </div>
+      <div class="article-image-container">
+        <img src="https://d24ovhgu8s7341.cloudfront.net/uploads/post/cover/4108/thumbnail_The_Folder_Is_the_Agent.png" alt="" class="article-image" onerror="this.parentElement.innerHTML='<div class=\'article-image-placeholder\'>Нет изображения</div>'">
       </div>
     </article>
     
-    <article class="article" style="background: #fef3c7; color: #78350f;">
-      <img src="https://media.wired.com/photos/69e691cad29b04dda3eea13d/3:2/w_1280%2Cc_limit/tim-Cook-Steps-Down-Business-2233926949.jpg" alt="" class="article-image" onerror="this.style.display='none'">
+    <article class="article">
       <div class="article-content">
         <div class="article-number">06</div>
-        <div class="article-source">Wired</div>
-        <h2>Today's Picks</h2>
-        <p>John Ternus, the company’s senior vice president of hardware engineering, will replace Cook as CEO on September 1. Cook will stay on as executive chairman.</p>
-        <a href="https://wired.com/story/tim-cook-stepping-down-ceo-apple-john-ternus/" target="_blank" rel="noopener noreferrer" class="read-more" style="
-      background: #f59e0b;
-      color: #000;
-      border-color: #f59e0b;
-    ">
-          Читать полностью →
-        </a>
+        <div class="article-source">Every.to</div>
+        <h2>The Science of Why AI Still Can’t Write Like You</h2>
+        <div class="article-quote">New research on writing style reveals that the most distinctive parts of your prose are the ones you don't even think about.</div>
+        <a href="https://every.to/p/the-science-of-why-ai-still-can-t-write-like-you" target="_blank" rel="noopener noreferrer" class="read-more">Читать →</a>
+      </div>
+      <div class="article-image-container">
+        <img src="https://d24ovhgu8s7341.cloudfront.net/uploads/post/cover/3969/thumbnail_LLM_Stylometry_in_Spiral_3.png" alt="" class="article-image" onerror="this.parentElement.innerHTML='<div class=\'article-image-placeholder\'>Нет изображения</div>'">
       </div>
     </article>
     
-    <article class="article" style="background: #0369a1; color: #f0f9ff;">
-      <img src="https://media.wired.com/photos/69e1650c3768d90cb0bbf6c2/16:9/w_1280%2Cc_limit/Backchannel-Issue-With-AI-Doing-the-Writing-Busines-491874561.jpg" alt="" class="article-image" onerror="this.style.display='none'">
+    <article class="article">
       <div class="article-content">
         <div class="article-number">07</div>
-        <div class="article-source">Wired</div>
-        <h2>Subscriber Exclusives</h2>
-        <p>AI-assisted writing is creeping into newsrooms under the guise of efficiency. But the trade-off may be more profound than publishers are willing to admit.</p>
-        <a href="https://www.wired.com/v2/offers/wir_edit_hardcoded?source=Site_0_HCL_WIR_EDIT_HARDCODED_HOMEPAGE_MODULE_0_GLOBAL_JULY_2025_NEW_OFFER_ZZ" target="_blank" rel="noopener noreferrer" class="read-more" style="
-      background: #06b6d4;
-      color: #fff;
-      border-color: #06b6d4;
-    ">
-          Читать полностью →
-        </a>
+        <div class="article-source">DeepLearning.AI Batch</div>
+        <h2>Anthropic’s Claude Mythos Problem, Dark DNA Unveiled, Pitfalls for Assistive Models, Simulating Fluid Dynamics</h2>
+        <div class="article-quote">.</div>
+        <a href="https://www.deeplearning.ai/the-batch/tag/apr-10-2026/" target="_blank" rel="noopener noreferrer" class="read-more">Читать →</a>
+      </div>
+      <div class="article-image-container">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" class="article-image" onerror="this.parentElement.innerHTML='<div class=\'article-image-placeholder\'>Нет изображения</div>'">
       </div>
     </article>
     
-    <article class="article" style="background: #15803d; color: #f0fdf4;">
-      <img src="https://media.wired.com/photos/69dd573d3001957d4f673a2b/16:9/w_1280%2Cc_limit/Book-Excerpt-Unmasking-Group-of-Gamblers-Behind-One-of-Chess-Weirdest-Unsolved-Mysteries.png" alt="" class="article-image" onerror="this.style.display='none'">
+    <article class="article">
       <div class="article-content">
         <div class="article-number">08</div>
-        <div class="article-source">Wired</div>
-        <h2>The Big Story</h2>
-        <p>In July 1993, a disguised player entered the World Open chess tournament in Philadelphia using the name of a mathematician who died in 1957. His real identity remained unknown—until now.</p>
-        <a href="https://www.wired.com/category/big-story/" target="_blank" rel="noopener noreferrer" class="read-more" style="
-      background: #22c55e;
-      color: #000;
-      border-color: #22c55e;
-    ">
-          Читать полностью →
-        </a>
+        <div class="article-source">DeepLearning.AI Batch</div>
+        <h2>Claude Code’s Source Leaks, OpenAI Exits Video Generation, Gemini Adds Music Generation, LLMs Learn at Inference</h2>
+        <div class="article-quote">.</div>
+        <a href="https://www.deeplearning.ai/the-batch/tag/apr-03-2026/" target="_blank" rel="noopener noreferrer" class="read-more">Читать →</a>
+      </div>
+      <div class="article-image-container">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" class="article-image" onerror="this.parentElement.innerHTML='<div class=\'article-image-placeholder\'>Нет изображения</div>'">
       </div>
     </article>
     
-    <article class="article" style="background: #ea580c; color: #fef3c7;">
-      <img src="https://media.wired.com/photos/69dd05f668f51d0b7f425afa/16:9/w_1280%2Cc_limit/MarineLife_Lead.jpg" alt="" class="article-image" onerror="this.style.display='none'">
+    <article class="article">
       <div class="article-content">
         <div class="article-number">09</div>
-        <div class="article-source">Wired</div>
-        <h2>War on Iran</h2>
-        <p>As ships return to the Strait of Hormuz, mines, sonar, and congestion continue to reshape the Gulf beneath the surface.</p>
-        <a href="https://www.wired.com/tag/iran/" target="_blank" rel="noopener noreferrer" class="read-more" style="
-      background: #fbbf24;
-      color: #000;
-      border-color: #fbbf24;
-    ">
-          Читать полностью →
-        </a>
+        <div class="article-source">DeepLearning.AI Batch</div>
+        <h2>Nvidia’s Open Salvo, OpenAI’s Amazon Deal, Grok Cuts Video Prices, Recursive Language Models</h2>
+        <div class="article-quote">.</div>
+        <a href="https://www.deeplearning.ai/the-batch/tag/mar-27-2026/" target="_blank" rel="noopener noreferrer" class="read-more">Читать →</a>
+      </div>
+      <div class="article-image-container">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" class="article-image" onerror="this.parentElement.innerHTML='<div class=\'article-image-placeholder\'>Нет изображения</div>'">
       </div>
     </article>
     
-    <article class="article" style="background: #6d28d9; color: #ede9fe;">
-      <img src="https://media.beehiiv.com/cdn-cgi/image/fit=scale-down,format=auto,onerror=redirect,quality=80/uploads/publication/logo/faa6a747-8c1c-43c1-8155-91aa43268f01/Ad_9_2.png" alt="" class="article-image" onerror="this.style.display='none'">
+    <article class="article">
       <div class="article-content">
         <div class="article-number">10</div>
-        <div class="article-source">Superhuman</div>
-        <h2>Superhuman AI newsletter | #1 AI & Tech Newsletter</h2>
-        <p>Superhuman AI newsletter | #1 AI & Tech Newsletter</p>
-        <a href="https://twitter.com/heykahn" target="_blank" rel="noopener noreferrer" class="read-more" style="
-      background: #a78bfa;
-      color: #fff;
-      border-color: #a78bfa;
-    ">
-          Читать полностью →
-        </a>
+        <div class="article-source">DeepLearning.AI Batch</div>
+        <h2>Claude Opus 4.6 Thinks Smarter, xAI Joins SpaceX, AI Outperforms Doctors, Standardized AI Audits</h2>
+        <div class="article-quote">.</div>
+        <a href="https://www.deeplearning.ai/the-batch/tag/feb-13-2026/" target="_blank" rel="noopener noreferrer" class="read-more">Читать →</a>
+      </div>
+      <div class="article-image-container">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" class="article-image" onerror="this.parentElement.innerHTML='<div class=\'article-image-placeholder\'>Нет изображения</div>'">
       </div>
     </article>
-    
-  </div>
-</body>
-</html>
-  
+    </div></body></html>
