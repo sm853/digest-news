@@ -10,7 +10,7 @@ yarn-error.log*
 .env.*.local
 
 # Дайджесты (большие файлы)
-magazines/
+# magazines/
 
 # IDE
 .vscode/
