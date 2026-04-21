@@ -1,0 +1,51 @@
+name: Daily Digest Generator
+
+on:
+  schedule:
+    - cron: '0 10 * * *'
+  workflow_dispatch:
+
+jobs:
+  generate-digest:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Generate digest
+        run: npm start
+      
+      - name: Commit and push changes
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          
+          if [ -n "$(git status --porcelain)" ]; then
+            git add magazines/
+            git commit -m "📰 Daily digest: $(date +%Y-%m-%d)"
+            git push
+            echo "✅ Дайджест загружен на GitHub"
+          else
+            echo "⚠️ Нет новых файлов для загрузки"
+          fi
+      
+      - name: Job Status
+        if: always()
+        run: |
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "✅ Дайджест успешно создан!"
+          else
+            echo "❌ Ошибка при создании дайджеста"
+          fi

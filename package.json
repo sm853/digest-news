@@ -1,0 +1,20 @@
+{
+  "name": "fomo-digest",
+  "version": "1.0.0",
+  "description": "Ежедневный дайджест новостей AI с красивым оформлением",
+  "main": "digest.js",
+  "scripts": {
+    "start": "node digest.js",
+    "dev": "nodemon digest.js",
+    "schedule": "node schedule.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "node-cron": "^3.0.2",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
