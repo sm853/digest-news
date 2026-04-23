@@ -5,18 +5,16 @@ const path = require('path');
 
 // Конфигурация источников и ключевых слов
 const SOURCES = [
-  { url: 'https://every.to/', name: 'Every.to' },
-  { url: 'https://www.deeplearning.ai/the-batch/', name: 'DeepLearning.AI Batch' },
-  { url: 'https://www.therundown.ai/', name: 'The Rundown AI' },
-  { url: 'https://thezvi.substack.com/', name: 'The Zvi' },
-  { url: 'https://jack-clark.net/', name: 'Jack Clark' },
-  { url: 'https://www.jeffbullas.com/jabs/', name: 'Jeff Bullas JABS' }
+  { url: 'https://www.forbes.ru/', name: 'Forbes RU' },
+  { url: 'https://www.vedomosti.ru/', name: 'Vedomosti' },
+  { url: 'https://snob.ru/', name: 'Snob' },
+  { url: 'https://vc.ru/', name: 'VC.ru' },
 ];
 
 const KEYWORDS = [
-  'ai', 'tool', 'claude', 'chatgpt', 'neural', 'model',
-  'developer', 'privacy', 'science', 'creative', 'software',
-  'практич', 'инструмент', 'программ', 'алгоритм'
+  'vpn', 'блокировка', 'роскомнадзор', 'ограничение', 'сервис', 'белые',
+  'списки', 'блокировка', 'ресурс', 'макс', 'MAX',
+  'правительство', 'ограничение', 'программ', 'алгоритм'
 ];
 
 // Стили для 10 разных дизайнов - все в зеленом Matrix стиле
